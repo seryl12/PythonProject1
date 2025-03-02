@@ -1,0 +1,14 @@
+.row {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #C0C0C0; /* Серый цвет фона */
+    color: #000000; /* Белый цвет текста */
+    padding: 0.3rem 0.8rem;/* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
