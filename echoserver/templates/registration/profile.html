@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ user.get_username }}</title>
+</head>
+<body>
+<ul>
+    <li>first_name: {{ user.get_first_name }}</li>
+    <li>last_name: {{ user.get_last_name }}</li>
+    <li>username: {{ user.get_username }}</li>
+    <li>email: {{ user.get_email }}</li>
+    {% if user.is_staff %}
+    <li>status: staff</li>
+    {% else %}
+    <li>status: common user</li>
+    {% endif %}
+    <li>date joined: {{ user.date_joined.date }}</li>
+</ul>
+<a href="orders">Orders</a>
+<a href="/">Back</a>
+</body>
+</html>

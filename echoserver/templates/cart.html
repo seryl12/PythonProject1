@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+</head>
+<body>
+<div>my cart:</div>
+<div>total price: {{ total_price }}</div>
+<ul>
+    {% for book_type in book_list %}
+    <li>
+        <div>Name: {{ book_type.book.name }} Author: {{ book_type.book.author }}
+            Price: {{ book_type.book.price }} Count: {{ book_type.count }}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+<a href="make_order">Order</a>
+<a href="/">Back</a>
+</body>
+</html>

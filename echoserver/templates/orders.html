@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body>
+{% if len != 0 %}
+{% for order in order_list %}
+<ul>
+    <li>{{ order.date }}</li>
+    <li>
+        <ul>
+            {% for book in order.books %}
+            <li>Name: {{ book.name }} Author: {{ book.author }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>Total price: {{ order.price }}</li>
+</ul>
+{% endfor %}
+{% else %}
+<div>No orders</div>
+{% endif %}
+<a href="/">Back</a>
+</body>
+</html>
