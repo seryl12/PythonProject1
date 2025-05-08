@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (edit_book_page, add_book_page, homepage, delete_book_page, cart_view, make_order,
-                    SignUp, logout_view, not_staff_view, profile_view, cart_update, orders_view)
+                    SignUp, logout_view, not_staff_view, profile_view, cart_update, orders_view, check_username)
 
 urlpatterns = [
     path('', homepage, name='home'),
@@ -16,4 +16,5 @@ urlpatterns = [
     path('cart', cart_view, name='cart_view'),
     path('orders', orders_view, name='orders_view'),
     path('make_order', make_order, name='make_order'),
+    path('check_username/', check_username, name='check_username'),
 ]

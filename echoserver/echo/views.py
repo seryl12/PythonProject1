@@ -10,6 +10,10 @@ from django.urls import reverse_lazy
 from .forms import RegistrationForm
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+
+User = get_user_model()
 
 
 # Create your views here.
@@ -27,11 +31,18 @@ def add_book_page(request: HttpRequest):
 
 def homepage(request: HttpRequest):
     books = Book.objects.all()
-    paginator = Paginator(books, 2)
+
+    if (max_price := request.GET.get('max_price')) != 'None' and max_price:
+        print(max_price)
+        books = books.filter(price__lte=max_price)
+    else:
+        max_price = ''
+
+    paginator = Paginator(books, 3)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "index.html", {"page_obj": page_obj})
+    return render(request, "index.html", {"page_obj": page_obj, "max_price": max_price})
 
 
 def edit_book_page(request: HttpRequest, book_id):
@@ -144,3 +155,9 @@ def make_order(request: HttpRequest):
         order.save()
     request.session['cart'] = None
     return redirect("/")
+
+
+def check_username(request: HttpRequest):
+    username = request.GET.get('username', '')
+    exists = User.objects.filter(username=username).exists()
+    return JsonResponse({'exists': exists})

@@ -3,18 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>SignUp</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style/style1.css' %}">
 </head>
 <body>
-<form method="post" action="{% url 'signup' %}">
+<form method="post" action="{% url 'signup' %}" id="register_form">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="register">
 </form>
+
+<div id="email_error" class="error">
+
+</div>
+<div id="password_error" class="error">
+
+</div>
+<div id="username_error" class="error">
+
+</div>
+
+
 <div>
     <ul>
         <li><a href="/accounts/login">Login</a></li>
         <li><a href="/">Back</a></li>
     </ul>
 </div>
+
+<script>
+    document.getElementById('id_email').addEventListener('blur', function() {
+        const email = this.value;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            document.getElementById('email_error').textContent = 'Incorrect email';
+        }
+        else{
+            document.getElementById('email_error').textContent = '';
+        }
+    });
+
+    document.getElementById('id_password1').addEventListener('blur', function() {
+        const password = this.value;
+        if (password.length < 8) {
+            document.getElementById('password_error').textContent = 'Password must be at least 8 characters long';
+        }
+        else{
+            document.getElementById('password_error').textContent = '';
+        }
+    });
+
+    document.getElementById('id_username').addEventListener('blur', function() {
+        const username = this.value;
+        fetch(`/check_username/?username=${encodeURIComponent(username)}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('username_error').textContent =
+                    data.exists ? 'This login is already taken' : '';
+            });
+    });
+</script>
 </body>
 </html>

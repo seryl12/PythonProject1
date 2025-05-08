@@ -22,23 +22,34 @@
     <a href="/add">Add book</a>
     {% endif %}
 </div>
-{% for book in page_obj %}
-<div class="row">
-    <div>Name: {{ book.name }}</div>
-    <div>Author: {{ book.author }}</div>
-    <div>Price: {{ book.price }}</div>
-    <a href="/{{ book.id }}/cart_update" class="btn">Select</a>
-    {% if user.is_staff %}
-    <a href="/{{ book.id }}/edit" class="btn">Edit</a>
-    <a href="/{{ book.id }}/delete" class="btn">Delete</a>
-    {% endif %}
+
+<div class="filters">
+    <form id="filterForm">
+        <div>Максимальная цена</div>
+        <input type="number" name="max_price" value="{{ max_price }}">
+        <button type="submit">Применить</button>
+    </form>
 </div>
-{% endfor %}
-<div class="pagination">
+
+<div class="book-list">
+    {% for book in page_obj %}
+    <div class="row">
+        <div>Name: {{ book.name }}</div>
+        <div>Author: {{ book.author }}</div>
+        <div>Price: {{ book.price }}</div>
+        <a href="/{{ book.id }}/cart_update" class="btn">Select</a>
+        {% if user.is_staff %}
+        <a href="/{{ book.id }}/edit" class="btn">Edit</a>
+        <a href="/{{ book.id }}/delete" class="btn">Delete</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            <a href="?page=1&max_price={{ max_price }}">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}&max_price={{ max_price }}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -46,10 +57,29 @@
         </span>
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            <a href="?page={{ page_obj.next_page_number }}&max_price={{ max_price }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&max_price={{ max_price }}">last &raquo;</a>
         {% endif %}
     </span>
+    </div>
 </div>
+
+<script>
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        fetch('?page=1' + '&' + new URLSearchParams(formData))
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                document.querySelector('.book-list').innerHTML =
+                    doc.querySelector('.book-list').innerHTML;
+            });
+    });
+
+</script>
+
 </body>
 </html>
